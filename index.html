@@ -82,7 +82,7 @@
   <canvas id="hero-canvas"></canvas>
   <div class="hero-bg-text">DACAR</div>
   <div class="hero-inner">
-    <div class="hero-tag">Concesionario Premium · Colombia</div>
+    <div class="hero-tag">Encuentra tu auto Ideal. Financiación Flexible. Aprobación en minutos</div>
     <h1 class="hero-h1">
       Tu próximo<br>
       <em class="line2">carro te espera</em>
@@ -122,6 +122,9 @@
 
 <!-- ═══════ NOSOTROS ═══════ -->
 <section id="nosotros" class="sec nos-grid">
+  <!-- Fondo collage de fotos de carros en venta -->
+  <div class="nos-cars-bg" id="nosBg" aria-hidden="true"></div>
+
   <div class="nos-text">
     <div class="sec-eyebrow">Quiénes Somos</div>
     <h2 class="sec-h2">Pasión por<br>cada <em>vehículo</em></h2>
@@ -252,17 +255,46 @@
       <h2 class="c-h2">¿Listo para tu<br>nuevo <em>carro?</em></h2>
       <p class="c-body">Uno de nuestros asesores te ayudará a encontrar el vehículo ideal. Visítanos, llámanos o escríbenos — estamos aquí para ti.</p>
       <div class="c-contact-lines">
-        <div class="c-contact-line"><div class="c-contact-icon">📍</div> Pereira, Risaralda — Colombia</div>
-        <div class="c-contact-line"><div class="c-contact-icon">📞</div> +57 300 000 0000</div>
+        <div class="c-contact-line"><div class="c-contact-icon">📍</div> Bogotá D.C - Av. Cra 68 # 75 A - 50 Metrópolis L-258</div>
+        <div class="c-contact-line"><div class="c-contact-icon">📞</div> +57 3208386306</div>
         <div class="c-contact-line"><div class="c-contact-icon">✉️</div> info@dacar.co</div>
         <div class="c-contact-line"><div class="c-contact-icon">🕐</div> Lun–Sáb 8am – 6pm</div>
       </div>
-      <div class="socials">
-        <a href="#" class="social-link">📘 Facebook</a>
-        <a href="#" class="social-link">📸 Instagram</a>
-        <a href="#" class="social-link">🎵 TikTok</a>
-        <a href="#" class="social-link">💬 WhatsApp</a>
-        <a href="#" class="social-link">🐦 Twitter / X</a>
+    <div class="socials">
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/DACARAUTOSCOLOMBIA/#" target="_blank" class="social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+          Facebook
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/dacarautos.colombia/" target="_blank" class="social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+          Instagram
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://www.tiktok.com/@dacarautoscolombia?_t=8kiG4rmEQRa&_r=1" target="_blank" class="social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/>
+          </svg>
+          TikTok
+        </a>
+
+        <!-- WhatsApp -->
+        <a href="https://wa.me/573208386306" target="_blank" class="social-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.118.553 4.107 1.523 5.83L.057 23.082a.75.75 0 0 0 .921.919l5.344-1.488A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 0 1-5.004-1.384l-.36-.214-3.716 1.034 1.003-3.635-.235-.374A9.713 9.713 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+          </svg>
+          WhatsApp
+        </a>
       </div>
     </div>
     <div class="c-form-wrap">
@@ -346,8 +378,9 @@
       <button class="close-x" onclick="closeAdmin()">✕</button>
     </div>
     <div class="a-tabs">
-      <button class="a-tab on" onclick="aTab('add',this)">+ Agregar Vehículo</button>
-      <button class="a-tab" onclick="aTab('list',this)">📋 Inventario Actual</button>
+      <button class="a-tab on" onclick="aTab('add',this)">+ Agregar</button>
+      <button class="a-tab" onclick="aTab('list',this)">📋 Inventario</button>
+      <button class="a-tab" onclick="aTab('edit',this)">✏️ Editar</button>
     </div>
 
     <!-- AGREGAR -->
@@ -387,9 +420,69 @@
       </div>
     </div>
 
-    <!-- LISTA -->
+    <!-- INVENTARIO -->
     <div class="a-pane" id="pList">
       <div class="inv-list" id="invList"><div class="spinner"></div></div>
+    </div>
+
+    <!-- EDITAR -->
+    <div class="a-pane" id="pEdit">
+      <!-- Selector de vehículo a editar -->
+      <div style="margin-bottom:22px">
+        <label class="a-label">Seleccionar vehículo a editar</label>
+        <select class="a-select" id="editCarSel" onchange="loadEditForm()">
+          <option value="">— Elige un vehículo —</option>
+        </select>
+      </div>
+
+      <!-- Formulario de edición (oculto hasta seleccionar) -->
+      <div id="editFormWrap" style="display:none">
+        <div class="edit-preview" id="editPreview"></div>
+        <div class="a-grid" style="margin-top:20px">
+          <input type="hidden" id="eId">
+          <div><label class="a-label">Marca *</label><input class="a-input" id="eMarca"></div>
+          <div><label class="a-label">Modelo *</label><input class="a-input" id="eModelo"></div>
+          <div><label class="a-label">Año *</label><input class="a-input" id="eAnio" type="number"></div>
+          <div><label class="a-label">Precio (COP) *</label><input class="a-input" id="ePrecio" type="number"></div>
+          <div>
+            <label class="a-label">Categoría *</label>
+            <select class="a-select" id="eCat">
+              <option value="">Seleccionar…</option>
+              <option value="mecanicos">Mecánico</option>
+              <option value="automaticos">Automático</option>
+              <option value="hibridos">Híbrido</option>
+              <option value="semihibridos">Semihíbrido</option>
+            </select>
+          </div>
+          <div><label class="a-label">Kilometraje</label><input class="a-input" id="eKm"></div>
+          <div><label class="a-label">Color</label><input class="a-input" id="eColor"></div>
+          <div>
+            <label class="a-label">Combustible</label>
+            <select class="a-select" id="eFuel">
+              <option value="">Seleccionar…</option>
+              <option>Gasolina</option>
+              <option>Diesel</option>
+              <option>Eléctrico</option>
+              <option>Híbrido</option>
+            </select>
+          </div>
+          <div class="span2">
+            <label class="a-label">URL Foto Principal</label>
+            <input class="a-input" id="eFoto" type="url" placeholder="https://…imagen.jpg">
+            <div id="editFotoPreview" style="margin-top:10px"></div>
+          </div>
+          <div class="span2"><label class="a-label">Descripción</label><textarea class="a-textarea" id="eDesc"></textarea></div>
+          <div class="span2" style="display:flex;gap:12px">
+            <button class="btn-red" style="flex:1;justify-content:center;padding:13px" onclick="saveCar()">💾 GUARDAR CAMBIOS</button>
+            <button class="btn-ghost" style="padding:13px 20px" onclick="cancelEdit()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="editEmpty" style="text-align:center;padding:60px 20px;color:var(--muted)">
+        <div style="font-size:3rem;opacity:.2;margin-bottom:14px">✏️</div>
+        <p>Selecciona un vehículo arriba para editar su información.</p>
+      </div>
     </div>
   </div>
 </div>

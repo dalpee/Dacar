@@ -207,11 +207,50 @@ const DEMO_CARS = [
 })();
 
 /* ════════════════════════════════════════════════════════════
-   NAVBAR — efecto scroll
+   NAVBAR — efecto scroll + dropdown clic
 ════════════════════════════════════════════════════════════ */
 window.addEventListener('scroll', () => {
   document.getElementById('nav').classList.toggle('small', scrollY > 60);
 });
+
+// Dropdown de Carros — abrir/cerrar con clic
+(function initDropdown() {
+  const trigger = document.querySelector('.nl');
+  const mega    = document.querySelector('.mega');
+  if (!trigger || !mega) return;
+
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = mega.classList.contains('open');
+    closeMega();
+    if (!isOpen) {
+      mega.classList.add('open');
+      trigger.classList.add('open');
+    }
+  });
+
+  // Cerrar al hacer clic en un mega-item
+  mega.querySelectorAll('.mega-item').forEach(item => {
+    item.addEventListener('click', () => closeMega());
+  });
+
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (!trigger.contains(e.target) && !mega.contains(e.target)) {
+      closeMega();
+    }
+  });
+
+  // Cerrar al presionar Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMega();
+  });
+
+  function closeMega() {
+    mega.classList.remove('open');
+    trigger.classList.remove('open');
+  }
+})();
 
 /* ════════════════════════════════════════════════════════════
    FILTRO POR CATEGORÍA
@@ -334,6 +373,7 @@ async function loadCars() {
     cars = [...DEMO_CARS];
     renderCars();
     buildSlider();
+    buildNosBg();
     return;
   }
 
@@ -352,6 +392,7 @@ async function loadCars() {
 
   renderCars();
   buildSlider();
+  buildNosBg();
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -504,6 +545,219 @@ function clearAdminForm() {
     .forEach(id => { document.getElementById(id).value = ''; });
   document.getElementById('fCat').value  = '';
   document.getElementById('fFuel').value = '';
+}
+
+/* ════════════════════════════════════════════════════════════
+   ADMIN — EDITAR VEHÍCULO
+════════════════════════════════════════════════════════════ */
+
+/* Poblar el select de edición con los carros actuales */
+function populateEditSel() {
+  const sel = document.getElementById('editCarSel');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Elige un vehículo —</option>' +
+    cars.map(c =>
+      `<option value="${c.id}">${c.marca} ${c.modelo} ${c.anio}</option>`
+    ).join('');
+}
+
+/* Al seleccionar un carro en el select de edición */
+function loadEditForm() {
+  const id  = document.getElementById('editCarSel').value;
+  const wrap = document.getElementById('editFormWrap');
+  const empty = document.getElementById('editEmpty');
+
+  if (!id) {
+    wrap.style.display  = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  const car = cars.find(c => String(c.id) === String(id));
+  if (!car) return;
+
+  // Mostrar preview del carro seleccionado
+  document.getElementById('editPreview').innerHTML = `
+    <div class="edit-preview-img">
+      ${car.foto_url
+        ? `<img src="${car.foto_url}" alt="${car.marca}" onerror="this.parentElement.innerHTML='🚗'">`
+        : '🚗'}
+    </div>
+    <div class="edit-preview-info">
+      <h4>${car.marca} ${car.modelo}</h4>
+      <span>${CL[car.categoria] || car.categoria} · ${car.anio}</span>
+    </div>
+  `;
+
+  // Rellenar campos
+  document.getElementById('eId').value       = car.id;
+  document.getElementById('eMarca').value    = car.marca       || '';
+  document.getElementById('eModelo').value   = car.modelo      || '';
+  document.getElementById('eAnio').value     = car.anio        || '';
+  document.getElementById('ePrecio').value   = car.precio      || '';
+  document.getElementById('eCat').value      = car.categoria   || '';
+  document.getElementById('eKm').value       = car.km          || '';
+  document.getElementById('eColor').value    = car.color       || '';
+  document.getElementById('eFuel').value     = car.combustible || '';
+  document.getElementById('eFoto').value     = car.foto_url    || '';
+  document.getElementById('eDesc').value     = car.descripcion || '';
+
+  // Preview foto en tiempo real
+  updateEditFotoPreview();
+
+  wrap.style.display  = 'block';
+  empty.style.display = 'none';
+}
+
+/* Preview de la foto al escribir la URL */
+document.addEventListener('DOMContentLoaded', () => {
+  const fi = document.getElementById('eFoto');
+  if (fi) fi.addEventListener('input', updateEditFotoPreview);
+});
+
+function updateEditFotoPreview() {
+  const url = (document.getElementById('eFoto') || {}).value || '';
+  const box = document.getElementById('editFotoPreview');
+  if (!box) return;
+  box.innerHTML = url
+    ? `<img src="${url}" alt="preview" onerror="this.parentElement.innerHTML=''">`
+    : '';
+}
+
+/* Guardar cambios del vehículo editado */
+async function saveCar() {
+  const id     = document.getElementById('eId').value;
+  const marca  = document.getElementById('eMarca').value.trim();
+  const modelo = document.getElementById('eModelo').value.trim();
+  const anio   = parseInt(document.getElementById('eAnio').value);
+  const precio = parseInt(document.getElementById('ePrecio').value);
+  const cat    = document.getElementById('eCat').value;
+
+  if (!marca || !modelo || !anio || !precio || !cat) {
+    showToast('Completa los campos requeridos (*)', 'err');
+    return;
+  }
+
+  const updated = {
+    marca, modelo, anio, precio,
+    categoria:   cat,
+    km:          document.getElementById('eKm').value,
+    color:       document.getElementById('eColor').value,
+    combustible: document.getElementById('eFuel').value,
+    foto_url:    document.getElementById('eFoto').value,
+    descripcion: document.getElementById('eDesc').value,
+  };
+
+  // Actualizar en Supabase si está configurado
+  if (SB_CONFIGURED && sb) {
+    const { error } = await sb.from('carros').update(updated).eq('id', id);
+    if (error) { showToast('Error al guardar: ' + error.message, 'err'); return; }
+  }
+
+  // Actualizar en memoria local
+  const idx = cars.findIndex(c => String(c.id) === String(id));
+  if (idx !== -1) cars[idx] = { ...cars[idx], ...updated };
+
+  renderCars();
+  buildSlider();
+  buildNosBg();
+  loadInvList();
+  populateEditSel();
+  cancelEdit();
+  showToast('¡Vehículo actualizado exitosamente! ✓', 'ok');
+}
+
+/* Cancelar edición */
+function cancelEdit() {
+  document.getElementById('editCarSel').value  = '';
+  document.getElementById('editFormWrap').style.display = 'none';
+  document.getElementById('editEmpty').style.display    = 'block';
+}
+
+/* Abrir pestaña editar con un carro preseleccionado (desde inventario) */
+function editCar(id) {
+  // Ir a la pestaña Editar
+  const tabs = document.querySelectorAll('.a-tab');
+  tabs.forEach(t => t.classList.remove('on'));
+  tabs[2].classList.add('on');
+  document.getElementById('pAdd').classList.remove('on');
+  document.getElementById('pList').classList.remove('on');
+  document.getElementById('pEdit').classList.add('on');
+
+  populateEditSel();
+  document.getElementById('editCarSel').value = id;
+  loadEditForm();
+}
+
+/* ── Actualizar loadInvList para incluir botón Editar ── */
+function loadInvList() {
+  const list = document.getElementById('invList');
+  if (!cars.length) {
+    list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">No hay vehículos en el inventario.</p>';
+    return;
+  }
+  list.innerHTML = cars.map(c => `
+    <div class="inv-row">
+      <div class="inv-info">
+        <h4>${c.marca} ${c.modelo} ${c.anio}</h4>
+        <span>${CL[c.categoria] || c.categoria} · ${fmt(c.precio)}</span>
+      </div>
+      <div class="inv-actions">
+        <button class="btn-edit" onclick="editCar(${c.id})">✏️ Editar</button>
+        <button class="btn-del"  onclick="deleteCar(${c.id})">🗑 Eliminar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── Actualizar aTab para incluir pEdit ── */
+function aTab(name, btn) {
+  document.querySelectorAll('.a-tab').forEach(t => t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('pAdd').classList.toggle('on',  name === 'add');
+  document.getElementById('pList').classList.toggle('on', name === 'list');
+  document.getElementById('pEdit').classList.toggle('on', name === 'edit');
+  if (name === 'list') loadInvList();
+  if (name === 'edit') { populateEditSel(); cancelEdit(); }
+}
+
+/* ── Actualizar openAdmin para incluir edit ── */
+function openAdmin() {
+  document.getElementById('adminOverlay').classList.add('open');
+  loadInvList();
+  populateEditSel();
+}
+
+/* ════════════════════════════════════════════════════════════
+   NOSOTROS — FONDO COLLAGE DE FOTOS DE CARROS
+════════════════════════════════════════════════════════════ */
+function buildNosBg() {
+  const bg = document.getElementById('nosBg');
+  if (!bg) return;
+
+  // Solo mostrar si hay carros con foto
+  const withPhoto = cars.filter(c => c.foto_url && c.foto_url.trim());
+  if (!withPhoto.length) { bg.style.opacity = '0'; return; }
+
+  // Repetir fotos hasta llenar 12 celdas
+  const tiles = [];
+  for (let i = 0; i < 12; i++) tiles.push(withPhoto[i % withPhoto.length]);
+
+  bg.innerHTML = tiles.map(c => `
+    <div class="nos-bg-tile">
+      <img src="${c.foto_url}" alt="${c.marca} ${c.modelo}"
+           onerror="this.parentElement.style.display='none'">
+    </div>
+  `).join('');
+
+  // Activar visibilidad con pequeño delay para transición
+  setTimeout(() => {
+    bg.classList.add('visible');
+    // Animar tiles uno por uno
+    bg.querySelectorAll('.nos-bg-tile').forEach((t, i) => {
+      setTimeout(() => t.classList.add('active'), i * 120);
+    });
+  }, 200);
 }
 
 /* ════════════════════════════════════════════════════════════
