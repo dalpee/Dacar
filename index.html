@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DACAR | Concesionario Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     PANTALLA DE CARGA — DACAR AUTOS
+═══════════════════════════════════════ -->
+<div id="loader">
+  <div class="loader-bg"></div>
+
+  <!-- Líneas de velocidad decorativas -->
+  <div class="loader-lines">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- Contenido central -->
+  <div class="loader-inner">
+    <div class="loader-logo-wrap">
+      <img src="img/LogoDacar.png" alt="Dacar Autos" class="loader-logo" id="loaderLogo">
+    </div>
+
+    <div class="loader-bar-wrap">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+
+    <div class="loader-text" id="loaderText">Cargando experiencia...</div>
+  </div>
+
+  <!-- Partícula decorativa roja -->
+  <div class="loader-orb"></div>
+</div>
+
+<!-- ═══════ NAV ═══════ -->
+<nav id="nav">
+  <div class="nav-logo-wrap">
+    <img src="img/LogoDacar.png" alt="Dacar Autos" class="nav-logo-img">
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#mision">Misión</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+    <li>
+      <span class="nl">Carros <span class="nav-chevron">▾</span></span>
+      <div class="mega">
+        <div class="mega-item" onclick="filterCat('mecanicos')">
+          <div class="mega-icon">⚙️</div>
+          <div><div class="mega-label">Mecánicos</div><div class="mega-sub">Transmisión manual</div></div>
+        </div>
+        <div class="mega-item" onclick="filterCat('automaticos')">
+          <div class="mega-icon">🚗</div>
+          <div><div class="mega-label">Automáticos</div><div class="mega-sub">Confort al máximo</div></div>
+        </div>
+        <div class="mega-item" onclick="filterCat('hibridos')">
+          <div class="mega-icon">🔋</div>
+          <div><div class="mega-label">Híbridos</div><div class="mega-sub">Eficiencia total</div></div>
+        </div>
+        <div class="mega-item" onclick="filterCat('semihibridos')">
+          <div class="mega-icon">⚡</div>
+          <div><div class="mega-label">Semihíbridos</div><div class="mega-sub">Lo mejor de dos mundos</div></div>
+        </div>
+      </div>
+    </li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+
+  <button class="btn-nav-admin" id="openAdminBtn">⚙ Admin</button>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<div id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-bg-text">DACAR</div>
+  <div class="hero-inner">
+    <div class="hero-tag">Concesionario Premium · Colombia</div>
+    <h1 class="hero-h1">
+      Tu próximo<br>
+      <em class="line2">carro te espera</em>
+    </h1>
+    <p class="hero-body">Vehículos seleccionados con los más altos estándares de calidad. Mecánicos, automáticos, híbridos y semihíbridos — todos bajo el sello <strong>Dacar</strong>.</p>
+    <div class="hero-actions">
+      <a href="#carros" class="btn-red">Ver Inventario →</a>
+      <a href="#contacto" class="btn-ghost">Contáctanos</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div><div class="hstat-num">500<span>+</span></div><div class="hstat-label">Vehículos vendidos</div></div>
+    <div><div class="hstat-num">15<span>+</span></div><div class="hstat-label">Años de experiencia</div></div>
+    <div><div class="hstat-num">98<span>%</span></div><div class="hstat-label">Clientes satisfechos</div></div>
+  </div>
+</div>
+
+<!-- Marquee -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span>Mecánicos</span><em>✦</em>
+    <span>Automáticos</span><em>✦</em>
+    <span>Híbridos</span><em>✦</em>
+    <span>Semihíbridos</span><em>✦</em>
+    <span>Dacar</span><em>✦</em>
+    <span>Calidad Premium</span><em>✦</em>
+    <span>Colombia</span><em>✦</em>
+    <span>Mecánicos</span><em>✦</em>
+    <span>Automáticos</span><em>✦</em>
+    <span>Híbridos</span><em>✦</em>
+    <span>Semihíbridos</span><em>✦</em>
+    <span>Dacar</span><em>✦</em>
+    <span>Calidad Premium</span><em>✦</em>
+    <span>Colombia</span><em>✦</em>
+  </div>
+</div>
+
+<!-- ═══════ NOSOTROS ═══════ -->
+<section id="nosotros" class="sec nos-grid">
+  <div class="nos-text">
+    <div class="sec-eyebrow">Quiénes Somos</div>
+    <h2 class="sec-h2">Pasión por<br>cada <em>vehículo</em></h2>
+    <p>En <strong>Dacar</strong> llevamos más de 15 años conectando personas con el carro de sus sueños. Somos un equipo apasionado por el automovilismo, comprometido con la transparencia, calidad y el mejor servicio postventa del mercado colombiano.</p>
+    <p>Nuestro inventario es cuidadosamente seleccionado — cada vehículo pasa por una revisión técnica exhaustiva antes de ponerse en venta. Tu confianza es nuestro mayor activo.</p>
+    <div class="nos-stats">
+      <div class="nos-stat"><div class="nos-stat-n">500+</div><div class="nos-stat-l">Vehículos vendidos</div></div>
+      <div class="nos-stat"><div class="nos-stat-n">15+</div><div class="nos-stat-l">Años en el mercado</div></div>
+      <div class="nos-stat"><div class="nos-stat-n">98%</div><div class="nos-stat-l">Clientes felices</div></div>
+      <div class="nos-stat"><div class="nos-stat-n">4</div><div class="nos-stat-l">Categorías premium</div></div>
+    </div>
+  </div>
+  <div class="nos-panel">
+    <div class="nos-panel-label">DACAR</div>
+    <div class="nos-panel-inner">
+      <div class="nos-logo-wrap">
+        <img src="img/LogoDacar.png" alt="Dacar Autos" class="nos-logo-img">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ MISIÓN ═══════ -->
+<div id="mision" class="mision-bg">
+  <div class="mision-wrap">
+    <div class="mision-left">
+      <div class="sec-eyebrow">Lo que nos mueve</div>
+      <h2 class="sec-h2">Nuestra<br><em>misión</em></h2>
+      <p class="mision-body">Cada decisión que tomamos está orientada a darte la mejor experiencia posible — desde que entras a nuestra sala de exhibición hasta que conduces tu nuevo carro a casa.</p>
+    </div>
+    <div class="mision-right">
+      <div class="mc">
+        <div class="mc-num">01</div>
+        <div class="mc-ico">🎯</div>
+        <h3>Misión</h3>
+        <p>Brindar la mejor experiencia en compra de vehículos con honestidad, calidad y un servicio que supera expectativas en cada interacción.</p>
+      </div>
+      <div class="mc">
+        <div class="mc-num">02</div>
+        <div class="mc-ico">🔭</div>
+        <h3>Visión</h3>
+        <p>Ser el concesionario de referencia en Colombia, reconocido por integridad, innovación y un inventario que refleja el futuro de la movilidad.</p>
+      </div>
+      <div class="mc span2">
+        <div class="mc-num">03</div>
+        <div class="mc-ico">💎</div>
+        <h3>Nuestros Valores</h3>
+        <p>Transparencia · Pasión · Responsabilidad · Compromiso. Creemos que comprar un carro debe ser una experiencia emocionante y sin sorpresas desagradables.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ EQUIPO ═══════ -->
+<section id="equipo" class="sec">
+  <div class="equipo-intro">
+    <div>
+      <div class="sec-eyebrow">Las personas detrás</div>
+      <h2 class="sec-h2">Nuestro<br><em>equipo</em></h2>
+    </div>
+    <p class="equipo-body">Un grupo de profesionales apasionados que trabajan cada día para que encuentres exactamente lo que buscas. Conocimiento técnico, servicio cálido y compromiso total con tu satisfacción.</p>
+  </div>
+  <div class="team-grid">
+    <div class="tc">
+      <div class="tc-photo">👔<div class="tc-stripe"></div></div>
+      <div class="tc-body">
+        <div class="tc-name">Carlos Rodríguez</div>
+        <div class="tc-role">Director General</div>
+        <div class="tc-bio">15 años liderando Dacar con visión y pasión por el sector automotor colombiano.</div>
+      </div>
+    </div>
+    <div class="tc">
+      <div class="tc-photo">🔧<div class="tc-stripe"></div></div>
+      <div class="tc-body">
+        <div class="tc-name">Andrés Martínez</div>
+        <div class="tc-role">Jefe de Mecánica</div>
+        <div class="tc-bio">Especialista certificado. Cada vehículo del inventario pasa por su rigurosa revisión técnica.</div>
+      </div>
+    </div>
+    <div class="tc">
+      <div class="tc-photo">💼<div class="tc-stripe"></div></div>
+      <div class="tc-body">
+        <div class="tc-name">Laura Gómez</div>
+        <div class="tc-role">Asesora Comercial</div>
+        <div class="tc-bio">Te guía en todo el proceso de compra. Honesta, conocedora y siempre pensando en tu mejor opción.</div>
+      </div>
+    </div>
+    <div class="tc">
+      <div class="tc-photo">📋<div class="tc-stripe"></div></div>
+      <div class="tc-body">
+        <div class="tc-name">Diego Vargas</div>
+        <div class="tc-role">Gestión de Inventario</div>
+        <div class="tc-bio">Garantiza que cada carro en nuestra plataforma tenga información precisa y actualizada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SLIDER ═══════ -->
+<div class="slider-wrap">
+  <div class="slider-track" id="sliderTrack"></div>
+</div>
+
+<!-- ═══════ CARROS ═══════ -->
+<section id="carros" class="sec">
+  <div class="carros-header">
+    <div>
+      <div class="sec-eyebrow">Disponibles ahora</div>
+      <h2 class="sec-h2">Carros en <em>Venta</em></h2>
+    </div>
+  </div>
+  <div class="cat-pills">
+    <button class="cat-pill on" data-cat="todos">Todos <span class="cat-count" id="cnt-todos">0</span></button>
+    <button class="cat-pill" data-cat="mecanicos">⚙ Mecánicos <span class="cat-count" id="cnt-mecanicos">0</span></button>
+    <button class="cat-pill" data-cat="automaticos">🚗 Automáticos <span class="cat-count" id="cnt-automaticos">0</span></button>
+    <button class="cat-pill" data-cat="hibridos">🔋 Híbridos <span class="cat-count" id="cnt-hibridos">0</span></button>
+    <button class="cat-pill" data-cat="semihibridos">⚡ Semihíbridos <span class="cat-count" id="cnt-semihibridos">0</span></button>
+  </div>
+  <div style="height:36px"></div>
+  <div class="cars-grid" id="carsGrid"><div class="spinner"></div></div>
+</section>
+
+<!-- ═══════ CONTACTO ═══════ -->
+<div id="contacto" class="contacto-bg">
+  <div class="contacto-wrap">
+    <div class="c-info">
+      <div class="c-info-tag">Hablemos</div>
+      <h2 class="c-h2">¿Listo para tu<br>nuevo <em>carro?</em></h2>
+      <p class="c-body">Uno de nuestros asesores te ayudará a encontrar el vehículo ideal. Visítanos, llámanos o escríbenos — estamos aquí para ti.</p>
+      <div class="c-contact-lines">
+        <div class="c-contact-line"><div class="c-contact-icon">📍</div> Pereira, Risaralda — Colombia</div>
+        <div class="c-contact-line"><div class="c-contact-icon">📞</div> +57 300 000 0000</div>
+        <div class="c-contact-line"><div class="c-contact-icon">✉️</div> info@dacar.co</div>
+        <div class="c-contact-line"><div class="c-contact-icon">🕐</div> Lun–Sáb 8am – 6pm</div>
+      </div>
+      <div class="socials">
+        <a href="#" class="social-link">📘 Facebook</a>
+        <a href="#" class="social-link">📸 Instagram</a>
+        <a href="#" class="social-link">🎵 TikTok</a>
+        <a href="#" class="social-link">💬 WhatsApp</a>
+        <a href="#" class="social-link">🐦 Twitter / X</a>
+      </div>
+    </div>
+    <div class="c-form-wrap">
+      <div class="sec-eyebrow" style="margin-bottom:18px">Solicitar Información</div>
+      <div class="c-form">
+        <div class="f-row">
+          <div><label class="f-label">Nombre</label><input class="f-input" type="text" placeholder="Tu nombre completo"></div>
+          <div><label class="f-label">Teléfono</label><input class="f-input" type="tel" placeholder="+57 300..."></div>
+        </div>
+        <div><label class="f-label">Correo Electrónico</label><input class="f-input" type="email" placeholder="correo@ejemplo.com"></div>
+        <div>
+          <label class="f-label">Vehículo de Interés</label>
+          <select class="f-select" id="carInterestSel"><option value="">Seleccionar vehículo...</option></select>
+        </div>
+        <div><label class="f-label">Mensaje</label><textarea class="f-textarea" placeholder="¿Qué información necesitas sobre el vehículo?"></textarea></div>
+        <button class="btn-red btn-full" onclick="showToast('¡Mensaje enviado! Te contactaremos pronto.','ok')">ENVIAR SOLICITUD →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="footer-top">
+    <div class="f-brand">
+      <div class="f-brand-logo">
+        <img src="img/LogoDacar.png" alt="Dacar Autos" class="footer-logo-img">
+      </div>
+      <p>Tu concesionario de confianza en Colombia. Calidad, transparencia y pasión por los vehículos desde hace más de 15 años.</p>
+    </div>
+    <div class="f-col">
+      <h5>Inventario</h5>
+      <a href="#carros">Mecánicos</a>
+      <a href="#carros">Automáticos</a>
+      <a href="#carros">Híbridos</a>
+      <a href="#carros">Semihíbridos</a>
+    </div>
+    <div class="f-col">
+      <h5>Empresa</h5>
+      <a href="#nosotros">Nosotros</a>
+      <a href="#mision">Misión</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="f-col">
+      <h5>Redes Sociales</h5>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+      <a href="#">TikTok</a>
+      <a href="#">WhatsApp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 <em>Dacar</em>. Todos los derechos reservados.</span>
+    <span>Hecho con ❤ en Colombia</span>
+  </div>
+</footer>
+
+<!-- ═══════ LOGIN MODAL ═══════ -->
+<div class="overlay" id="loginOverlay">
+  <div class="modal login-modal">
+    <div class="modal-head">
+      <h2>Admin <em>Login</em></h2>
+      <button class="close-x" onclick="closeLogin()">✕</button>
+    </div>
+    <p class="modal-sub">Acceso restringido al panel de administración Dacar.</p>
+    <div class="f-group"><label class="a-label">Usuario</label><input class="a-input" id="aUser" type="text" placeholder="admin"></div>
+    <div class="f-group"><label class="a-label">Contraseña</label><input class="a-input" id="aPass" type="password" placeholder="••••••••"></div>
+    <div class="login-actions">
+      <button class="btn-red" onclick="doLogin()">INGRESAR</button>
+      <button class="btn-ghost" onclick="closeLogin()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ADMIN MODAL ═══════ -->
+<div class="overlay" id="adminOverlay">
+  <div class="modal admin-modal">
+    <div class="modal-head">
+      <h2>Panel <em>Admin</em></h2>
+      <button class="close-x" onclick="closeAdmin()">✕</button>
+    </div>
+    <div class="a-tabs">
+      <button class="a-tab on" onclick="aTab('add',this)">+ Agregar Vehículo</button>
+      <button class="a-tab" onclick="aTab('list',this)">📋 Inventario Actual</button>
+    </div>
+
+    <!-- AGREGAR -->
+    <div class="a-pane on" id="pAdd">
+      <div class="a-grid">
+        <div><label class="a-label">Marca *</label><input class="a-input" id="fMarca" placeholder="Toyota, Honda, BMW…"></div>
+        <div><label class="a-label">Modelo *</label><input class="a-input" id="fModelo" placeholder="Corolla, Civic, X5…"></div>
+        <div><label class="a-label">Año *</label><input class="a-input" id="fAnio" type="number" placeholder="2024"></div>
+        <div><label class="a-label">Precio (COP) *</label><input class="a-input" id="fPrecio" type="number" placeholder="85000000"></div>
+        <div>
+          <label class="a-label">Categoría *</label>
+          <select class="a-select" id="fCat">
+            <option value="">Seleccionar…</option>
+            <option value="mecanicos">Mecánico</option>
+            <option value="automaticos">Automático</option>
+            <option value="hibridos">Híbrido</option>
+            <option value="semihibridos">Semihíbrido</option>
+          </select>
+        </div>
+        <div><label class="a-label">Kilometraje</label><input class="a-input" id="fKm" placeholder="0 km / 45,000 km"></div>
+        <div><label class="a-label">Color</label><input class="a-input" id="fColor" placeholder="Blanco, Negro…"></div>
+        <div>
+          <label class="a-label">Combustible</label>
+          <select class="a-select" id="fFuel">
+            <option value="">Seleccionar…</option>
+            <option>Gasolina</option>
+            <option>Diesel</option>
+            <option>Eléctrico</option>
+            <option>Híbrido</option>
+          </select>
+        </div>
+        <div class="span2"><label class="a-label">URL Foto Principal</label><input class="a-input" id="fFoto" type="url" placeholder="https://…imagen.jpg"></div>
+        <div class="span2"><label class="a-label">Descripción</label><textarea class="a-textarea" id="fDesc" placeholder="Estado, equipamiento, características…"></textarea></div>
+        <div class="span2">
+          <button class="btn-red btn-full" onclick="addCar()">➕ AGREGAR AL INVENTARIO</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA -->
+    <div class="a-pane" id="pList">
+      <div class="inv-list" id="invList"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toastEl"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
