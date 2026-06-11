@@ -842,6 +842,37 @@ footer { padding: 64px 48px 32px; max-width: 1360px; margin: 0 auto; }
 .inv-actions { display: flex; gap: 8px; }
 
 /* ══════════════════════════════════════════
+   ADMIN — COTIZACIONES
+══════════════════════════════════════════ */
+.cot-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  background: var(--ink3); border: 1px solid var(--line);
+  border-radius: 10px; padding: 18px 20px; gap: 16px;
+  transition: border-color .2s; margin-bottom: 12px;
+}
+.cot-row:hover { border-color: rgba(200,32,47,.2); }
+.cot-info { flex: 1; }
+.cot-info h4 {
+  font-family: var(--display); font-size: 1.1rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .5px;
+  color: var(--white); margin-bottom: 8px;
+}
+.cot-meta {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  font-family: var(--util); font-size: .75rem; color: var(--muted2);
+  margin-bottom: 8px;
+}
+.cot-msg {
+  font-size: .85rem; color: var(--muted); line-height: 1.6;
+  font-style: italic; margin: 8px 0;
+  border-left: 2px solid var(--red); padding-left: 10px;
+}
+.cot-date {
+  font-family: var(--util); font-size: .65rem;
+  color: var(--muted); letter-spacing: 1px; margin-top: 6px;
+}
+
+/* ══════════════════════════════════════════
    RESPONSIVE
 ══════════════════════════════════════════ */
 @media (max-width: 1024px) {

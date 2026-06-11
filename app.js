@@ -22,8 +22,8 @@
 ═══════════════════════════════════════════════════════════ */
 
 /* ── SUPABASE CONFIG ──────────────────────────────────────── */
-const SB_URL = 'https://TU_PROYECTO.supabase.co';   // ← cambia esto
-const SB_KEY = 'TU_ANON_KEY';                        // ← cambia esto
+const SB_URL = 'https://fgtmgvwuwcftfsosrrym.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZndG1ndnd1d2NmdGZzb3NycnltIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMzUyMDIsImV4cCI6MjA5NjcxMTIwMn0.BiEX4abw9nXNzqbk1o2xRlbzNFkWw1PBsYCB1N3dyNI';
 
 // Solo conecta si las credenciales fueron reemplazadas
 const SB_CONFIGURED = !SB_URL.includes('TU_PROYECTO') && !SB_KEY.includes('TU_ANON');
@@ -500,9 +500,22 @@ async function addCar() {
 
   /* Guardar en Supabase si está configurado */
   if (SB_CONFIGURED && sb) {
+    const payload = {
+      marca,
+      modelo,
+      anio,
+      precio,
+      categoria,
+      km:          document.getElementById('fKm').value,
+      color:       document.getElementById('fColor').value,
+      combustible: document.getElementById('fFuel').value,
+      foto_url:    document.getElementById('fFoto').value,
+      descripcion: document.getElementById('fDesc').value
+    };
+
     const { data, error } = await sb
       .from('carros')
-      .insert([{ ...car, id: undefined }])
+      .insert([payload])
       .select();
 
     if (error) {
@@ -710,18 +723,20 @@ function loadInvList() {
   `).join('');
 }
 
-/* ── Actualizar aTab para incluir pEdit ── */
+/* ── Actualizar aTab para incluir pEdit y pCot ── */
 function aTab(name, btn) {
   document.querySelectorAll('.a-tab').forEach(t => t.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('pAdd').classList.toggle('on',  name === 'add');
   document.getElementById('pList').classList.toggle('on', name === 'list');
   document.getElementById('pEdit').classList.toggle('on', name === 'edit');
+  document.getElementById('pCot').classList.toggle('on',  name === 'cot');
   if (name === 'list') loadInvList();
   if (name === 'edit') { populateEditSel(); cancelEdit(); }
+  if (name === 'cot')  loadCotizaciones();
 }
 
-/* ── Actualizar openAdmin para incluir edit ── */
+/* ── Actualizar openAdmin para incluir edit y cotizaciones ── */
 function openAdmin() {
   document.getElementById('adminOverlay').classList.add('open');
   loadInvList();
@@ -761,8 +776,97 @@ function buildNosBg() {
 }
 
 /* ════════════════════════════════════════════════════════════
-   TOAST (notificaciones)
+   COTIZACIONES — guardar en Supabase
 ════════════════════════════════════════════════════════════ */
+async function enviarCotizacion() {
+  const nombre   = document.getElementById('cNombre').value.trim();
+  const telefono = document.getElementById('cTelefono').value.trim();
+  const email    = document.getElementById('cEmail').value.trim();
+  const vehiculo = document.getElementById('carInterestSel').value.trim();
+  const mensaje  = document.getElementById('cMensaje').value.trim();
+
+  if (!nombre || !telefono) {
+    showToast('Por favor completa Nombre y Teléfono', 'err');
+    return;
+  }
+
+  const cotizacion = { nombre, telefono, email, vehiculo, mensaje };
+
+  if (SB_CONFIGURED && sb) {
+    const { error } = await sb.from('cotizaciones').insert([cotizacion]);
+    if (error) {
+      showToast('Error al enviar: ' + error.message, 'err');
+      return;
+    }
+  }
+
+  // Limpiar formulario
+  ['cNombre','cTelefono','cEmail','cMensaje'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('carInterestSel').value = '';
+
+  showToast('¡Mensaje enviado! Te contactaremos pronto 🚗', 'ok');
+}
+
+/* ════════════════════════════════════════════════════════════
+   ADMIN — COTIZACIONES
+════════════════════════════════════════════════════════════ */
+async function loadCotizaciones() {
+  const wrap = document.getElementById('cotizacionesList');
+  if (!wrap) return;
+
+  if (!SB_CONFIGURED || !sb) {
+    wrap.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Supabase no configurado.</p>';
+    return;
+  }
+
+  wrap.innerHTML = '<div class="spinner"></div>';
+
+  try {
+    const { data, error } = await sb
+      .from('cotizaciones')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || !data.length) {
+      wrap.innerHTML = `
+        <div style="text-align:center;padding:60px 20px;color:var(--muted)">
+          <div style="font-size:3rem;opacity:.2;margin-bottom:14px">📩</div>
+          <p>No hay cotizaciones aún.</p>
+        </div>`;
+      return;
+    }
+
+    wrap.innerHTML = data.map(c => `
+      <div class="cot-row">
+        <div class="cot-info">
+          <h4>${c.nombre}</h4>
+          <div class="cot-meta">
+            <span>📞 ${c.telefono}</span>
+            ${c.email    ? `<span>✉️ ${c.email}</span>`    : ''}
+            ${c.vehiculo ? `<span>🚗 ${c.vehiculo}</span>` : ''}
+          </div>
+          ${c.mensaje ? `<p class="cot-msg">"${c.mensaje}"</p>` : ''}
+          <div class="cot-date">${new Date(c.created_at).toLocaleString('es-CO')}</div>
+        </div>
+        <button class="btn-del" onclick="deleteCotizacion(${c.id})">🗑</button>
+      </div>
+    `).join('');
+  } catch (err) {
+    wrap.innerHTML = '<p style="color:var(--muted);text-align:center;padding:40px">Error al cargar cotizaciones.</p>';
+  }
+}
+
+async function deleteCotizacion(id) {
+  if (!confirm('¿Eliminar esta cotización?')) return;
+  const { error } = await sb.from('cotizaciones').delete().eq('id', id);
+  if (error) { showToast('Error al eliminar', 'err'); return; }
+  showToast('Cotización eliminada', 'ok');
+  loadCotizaciones();
+}
 let toastTimer;
 function showToast(msg, type = '') {
   const el = document.getElementById('toastEl');

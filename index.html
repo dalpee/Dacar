@@ -301,16 +301,16 @@
       <div class="sec-eyebrow" style="margin-bottom:18px">Solicitar Información</div>
       <div class="c-form">
         <div class="f-row">
-          <div><label class="f-label">Nombre</label><input class="f-input" type="text" placeholder="Tu nombre completo"></div>
-          <div><label class="f-label">Teléfono</label><input class="f-input" type="tel" placeholder="+57 300..."></div>
+          <div><label class="f-label">Nombre *</label><input class="f-input" id="cNombre" type="text" placeholder="Tu nombre completo"></div>
+          <div><label class="f-label">Teléfono *</label><input class="f-input" id="cTelefono" type="tel" placeholder="+57 300..."></div>
         </div>
-        <div><label class="f-label">Correo Electrónico</label><input class="f-input" type="email" placeholder="correo@ejemplo.com"></div>
+        <div><label class="f-label">Correo Electrónico</label><input class="f-input" id="cEmail" type="email" placeholder="correo@ejemplo.com"></div>
         <div>
           <label class="f-label">Vehículo de Interés</label>
           <select class="f-select" id="carInterestSel"><option value="">Seleccionar vehículo...</option></select>
         </div>
-        <div><label class="f-label">Mensaje</label><textarea class="f-textarea" placeholder="¿Qué información necesitas sobre el vehículo?"></textarea></div>
-        <button class="btn-red btn-full" onclick="showToast('¡Mensaje enviado! Te contactaremos pronto.','ok')">ENVIAR SOLICITUD →</button>
+        <div><label class="f-label">Mensaje</label><textarea class="f-textarea" id="cMensaje" placeholder="¿Qué información necesitas sobre el vehículo?"></textarea></div>
+        <button class="btn-red btn-full" onclick="enviarCotizacion()">ENVIAR SOLICITUD →</button>
       </div>
     </div>
   </div>
@@ -381,6 +381,7 @@
       <button class="a-tab on" onclick="aTab('add',this)">+ Agregar</button>
       <button class="a-tab" onclick="aTab('list',this)">📋 Inventario</button>
       <button class="a-tab" onclick="aTab('edit',this)">✏️ Editar</button>
+      <button class="a-tab" onclick="aTab('cot',this)">📩 Cotizaciones</button>
     </div>
 
     <!-- AGREGAR -->
@@ -484,6 +485,12 @@
         <p>Selecciona un vehículo arriba para editar su información.</p>
       </div>
     </div>
+
+    <!-- COTIZACIONES -->
+    <div class="a-pane" id="pCot">
+      <div id="cotizacionesList"><div class="spinner"></div></div>
+    </div>
+
   </div>
 </div>
 
