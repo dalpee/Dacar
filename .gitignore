@@ -1,0 +1,10 @@
+# Credenciales y datos sensibles
+config.js
+.env
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
